@@ -4,7 +4,7 @@ macOS daemon that captures Keychron K17 Max keystrokes (rotary knob, NumPad, fun
 
 ## How It Works
 
-The bridge runs as a background process, listening for specific key events from the Keychron K17 Max keyboard. It translates these into MIDI CC messages on **Channel 16** (isolated from the Arturia MiniLab MkII's Channels 2 and 10) and sends them to a virtual MIDI port that appears directly in Ableton Live.
+The bridge runs as a background process, listening for specific key events from the Keychron K17 Max keyboard. It translates these into MIDI CC messages on **Channel 16** and sends them to a virtual MIDI port that appears directly in Ableton Live.
 
 ## Control Map
 
