@@ -9,16 +9,23 @@ The bridge runs as a background process, listening for specific key events from 
 ## Control Map
 
 | Gesture | MIDI CC | Action in Ableton |
-| :--- | :--- | :--- |
-| Knob rotate | 86 | Track navigation (with native scroll) |
-| CTRL + Knob | 88 | Device/plugin navigation |
-| CMD + Knob | 80 | Track volume (0.5 dB steps) |
-| CMD + Shift + Knob | 85 | Track pan (5 pt steps) |
-| Shift + Knob | 89 | Timeline scrub |
-| Click (F15) | 81 | Toggle plugin window |
-| Shift + Click (F15) | 87 | Toggle device on/off (A/B test) |
-| NumPad 1-9 | 91-99 | Jump to marker 1-9 |
-| F17, F18, F19 | 82, 83, 84 | Free for custom mapping |
+| --- | --- | --- |
+| Knob rotate | 86 | Track navigation with native scroll |
+| Ctrl + knob | 88 | Device navigation |
+| Cmd + knob | 80 | Track volume |
+| Cmd + Shift + knob | 85 | Track pan |
+| Shift + knob | 89 | Timeline navigation |
+| Option + knob | 90 | Selected audio clip gain |
+| Ctrl + Shift + knob | 104 | Cue volume |
+| Knob click (F18) | 81 | Toggle plugin window |
+| Shift + click | 87 | Toggle device on/off |
+| Ctrl + Cmd + click | 103 | Cycle track monitoring |
+| Ctrl + NumPad 1–9 | 91–99 | Jump to locator 1–9 |
+| F13 | — | Open the Hammerspoon plugin menu |
+| F14 | 101 | Toggle metronome |
+| F15 | 102 | Toggle Main track Mono via a Utility device |
+
+The knob sends F17/F19 for rotation and F18 for a click. The bridge intercepts these knob events when Live is frontmost.
 
 ## Requirements
 
