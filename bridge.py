@@ -23,13 +23,8 @@ corefoundation = ctypes.CDLL('/System/Library/Frameworks/CoreFoundation.framewor
 objc = ctypes.CDLL('/usr/lib/libobjc.dylib')
 
 # CoreGraphics function signatures
-coregraphics.CGEventCreateScrollWheelEvent2.argtypes = [ctypes.c_void_p, ctypes.c_uint32, ctypes.c_uint32, ctypes.c_int32, ctypes.c_int32, ctypes.c_int32]
-coregraphics.CGEventCreateScrollWheelEvent2.restype = ctypes.c_void_p
-coregraphics.CGEventSetFlags.argtypes = [ctypes.c_void_p, ctypes.c_uint64]
 coregraphics.CGEventGetFlags.argtypes = [ctypes.c_void_p]
 coregraphics.CGEventGetFlags.restype = ctypes.c_uint64
-coregraphics.CGEventPost.argtypes = [ctypes.c_uint32, ctypes.c_void_p]
-coregraphics.CFRelease.argtypes = [ctypes.c_void_p]
 coregraphics.CGEventSourceFlagsState.argtypes = [ctypes.c_uint32]
 coregraphics.CGEventSourceFlagsState.restype = ctypes.c_uint64
 
@@ -57,7 +52,6 @@ kCFRunLoopCommonModes = ctypes.c_void_p.in_dll(corefoundation, 'kCFRunLoopCommon
 kCFRunLoopDefaultMode = ctypes.c_void_p.in_dll(corefoundation, 'kCFRunLoopDefaultMode')
 
 # CoreGraphics Constants
-kCGScrollEventUnitLine = 1
 kCGHIDEventTap = 0
 kCGSessionEventTap = 1
 kCGHeadInsertEventTap = 0
@@ -139,7 +133,6 @@ MIDI_PORT_NAME = "Keychron K17 Max MIDI"
 MIDI_CHANNEL = 15
 
 # CC Assignments
-CC_TRACK_NAV = 86
 CC_DEVICE_NAV = 88
 CC_VOLUME = 80
 CC_PAN = 85
@@ -200,7 +193,8 @@ class KeychronMidiBridge:
 
         print(f"[MIDI] Channel: {self.channel + 1} (isolated from Arturia)")
         print("[READY] Control layers active:")
-        print("   - Knob alone          -> Track Navigation (native scroll)")
+        print("   - Knob alone          -> AI Knob (Hammerspoon)")
+        print("   - Option + Shift + Knob -> Fine AI Knob (Hammerspoon)")
         print("   - CTRL + Knob         -> Device/Plugin Navigation (CC 88)")
         print("   - CMD + Knob          -> Track Volume (CC 80, 0.5 dB steps)")
         print("   - CMD + Shift + Knob  -> Track Pan (CC 85, 5 pt steps)")
@@ -403,23 +397,10 @@ class KeychronMidiBridge:
             self.outport.send(msg)
             print(f"{direction} | Option + Knob (Clip Gain) -> CC {CC_CLIP_GAIN} (Val {val})")
 
-        elif not cmd and not shift and not ctrl and not opt:
-            self._emit_option_shift_scroll(clockwise)
-            msg = mido.Message('control_change', channel=self.channel, control=CC_TRACK_NAV, value=val)
-            self.outport.send(msg)
-            print(f"{direction} | Knob (Track Scroll Auto) -> Sent Opt+Shift Scroll + CC {CC_TRACK_NAV}")
-
-    def _emit_option_shift_scroll(self, clockwise):
-        try:
-            delta = -2 if clockwise else 2
-            event = coregraphics.CGEventCreateScrollWheelEvent2(None, kCGScrollEventUnitLine, 2, delta, 0, 0)
-            if event:
-                flags = kCGEventFlagMaskAlternate | kCGEventFlagMaskShift
-                coregraphics.CGEventSetFlags(event, flags)
-                coregraphics.CGEventPost(kCGHIDEventTap, event)
-                coregraphics.CFRelease(event)
-        except Exception as e:
-            print(f"[ERROR] synthesizing scroll event: {e}")
+        elif not cmd and not ctrl and shift == opt:
+            step = 2 if shift else 1
+            delta = step if clockwise else -step
+            print(f"AI_KNOB {delta}", flush=True)
 
     def _send_button_press(self, cc, name):
         print(f"[BTN] {name} Pressed -> CC {cc} (127)")

@@ -10,22 +10,26 @@ The bridge runs as a background process, listening for specific key events from 
 
 | Gesture | MIDI CC | Action in Ableton |
 | --- | --- | --- |
-| Knob rotate | 86 | Track navigation with native scroll |
+| Knob rotate | — | AI Knob under the pointer via Hammerspoon |
+| Option + Shift + knob | — | Fine AI Knob via Hammerspoon |
 | Ctrl + knob | 88 | Device navigation |
 | Cmd + knob | 80 | Track volume |
 | Cmd + Shift + knob | 85 | Track pan |
 | Shift + knob | 89 | Timeline navigation |
-| Option + knob | 90 | Selected audio clip gain |
+| Option + knob | 90 | Gain of selected audio clips |
 | Ctrl + Shift + knob | 104 | Cue volume |
 | Knob click (F18) | 81 | Toggle plugin window |
 | Shift + click | 87 | Toggle device on/off |
 | Ctrl + Cmd + click | 103 | Cycle track monitoring |
-| Ctrl + NumPad 1–9 | 91–99 | Jump to locator 1–9 |
+| Ctrl + NumPad 0 | — | Add a locator via Hammerspoon |
+| Ctrl + NumPad 1–9 | 91–99 | Jump to locator 1–9 in Arrangement order |
 | F13 | — | Open the Hammerspoon plugin menu |
 | F14 | 101 | Toggle metronome |
 | F15 | 102 | Toggle Main track Mono via a Utility device |
 
 The knob sends F17/F19 for rotation and F18 for a click. The bridge intercepts these knob events when Live is frontmost.
+
+AI Knob rotation is sent directly to the matching [Hammerspoon configuration](https://github.com/miguelrodjim/les-macos-hammerspoon) that launches the bridge. Hammerspoon also handles Ctrl + NumPad 0 and F13. The remaining gestures use the virtual MIDI port.
 
 ## Requirements
 
